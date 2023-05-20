@@ -33,3 +33,12 @@ library(dockerthis)
 dockerthis::run("samtools", "--version")
 ```
 
+## Considerations
+
+`dockerthis` don't intend to be a comprehensive Docker Client wrapper.
+Additionally `dockerthis` is not intended to be a client communicating directly
+with the Docker Engine API, for that one can look at projects like [stevedore][stevedore-ref].
+
+---
+
+[stevedore-ref]: https://github.com/richfitz/stevedore
