@@ -74,6 +74,7 @@ docker_list_containers <- function() {
   return(res_df)
 }
 
+#' Remove Docker Image
 #' @param image_name Name or ID of the Image.
 #' @export
 docker_remove_image <- function(image_name) {
@@ -91,7 +92,7 @@ docker_remove_image <- function(image_name) {
   )
 }
 
-#' Remove Container
+#' Remove Docker Container
 #'
 #' Container needs to be stopped before removing
 #'
