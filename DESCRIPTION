@@ -19,3 +19,5 @@ Imports:
     fs,
     jsonlite,
     processx
+URL: https://github.com/luciorq/dockerthis
+BugReports: https://github.com/luciorq/dockerthis/issues
