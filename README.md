@@ -33,6 +33,12 @@ library(dockerthis)
 dockerthis::run("samtools", "--version")
 ```
 
+## Motivation
+
+`dockerthis` is an R package that promotes reproducibility and portability by running command line tools within isolated Linux containers.
+By seamlessly integrating R with Docker, it enables users to create, manage, and execute tools in controlled environments, ensuring consistent execution across different systems and facilitating collaboration.
+With `dockerthis`, researchers can confidently share and reproduce their workflows, accelerating scientific discoveries in a wide range of domains.
+
 ## Considerations
 
 `dockerthis` don't intend to be a comprehensive Docker Client wrapper.
