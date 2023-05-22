@@ -1,6 +1,6 @@
 Package: dockerthis
 Title: Dockerthis: run any CLI tool on a Linux Container
-Version: 0.0.0.9001
+Version: 0.0.0.9002
 Authors@R: c(
     person("Lucio Rezende", "Queiroz", , "luciorqueiroz@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6090-1834"))
@@ -15,7 +15,10 @@ Imports:
     cli,
     fs,
     jsonlite,
-    processx
+    processx,
+    purrr,
+    stringr,
+    tibble
 URL: https://github.com/luciorq/dockerthis
 BugReports: https://github.com/luciorq/dockerthis/issues
 Suggests:
