@@ -6,7 +6,15 @@
 \alias{dockerthis-package}
 \title{dockerthis: Dockerthis: run any CLI tool on a Linux Container}
 \description{
-Condathis is an R package that simplifies the execution of command line tools within isolated conda environments. It enables users to effortlessly manage conda environments, execute command line tools, handle dependencies, and ensure reproducibility in their data analysis workflows.
+Dockerthis is an R package that simplifies the execution of command line tools within isolated Docker containers.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/luciorq/dockerthis}
+  \item Report bugs at \url{https://github.com/luciorq/dockerthis/issues}
+}
+
 }
 \author{
 \strong{Maintainer}: Lucio Rezende Queiroz \email{luciorqueiroz@gmail.com} (\href{https://orcid.org/0000-0002-6090-1834}{ORCID})
