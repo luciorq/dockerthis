@@ -1,22 +1,56 @@
-#' Interact with Docker Engine Daemon
+#' Interact with Docker Engine Client CLI
 #'
+#' @description
 #' Functions for interaction with Docker Images and Containers
-
+#'
+#' - `docker_client_cmd()` is the main function to interact with the docker client.
+#'
+#' - `docker_list_images()` return a data frame with all tagged images
+#'   available for to user.
+#'
+#' - `docker_list_containers()` return a data  frame with all containers and
+#'   their state.
+#'
+#' - `docker_remove_image()` remove Docker image.
+#'
+#' - `docker_remove_container()` remove Docker container.
+#'
+#' - `docker_start_container()` start a stopped Docker container.
+#'
+#' - `docker_stop_container()` stop a running Docker container.
+#'
+#' @param image_name Character. Name or ID of the Image.
+#'
+#' @param container_name Character. Name or ID of the Container.
+#'
+#' @param verbose Logical. Should output from CLI be printed. Default: `TRUE`.
+#'
+#' @param ... Character. Arguments to be passed to Docker CLI.
+#'
 #' @export
-docker_list_images <- function() {
-  # docker image ls --format "{{json . }}"
+docker_client_cmd <- function(..., verbose = TRUE) {
   docker_bin_path <- is_docker_available()
   px_res <- processx::run(
     command = docker_bin_path,
-    args = c(
-      "image",
-      "ls",
-      "-a",
-      "--format",
-      "{{json .}}"
-    ),
-    echo = FALSE,
+    args = c(...),
+    echo = verbose,
+    echo_cmd = TRUE,
     spinner = TRUE
+  )
+  return(invisible(px_res))
+}
+
+#' @export
+#' @rdname docker_client_cmd
+docker_list_images <- function() {
+  # docker image ls --format "{{json . }}"
+  px_res <- docker_client_cmd(
+    "image",
+    "ls",
+    "-a",
+    "--format",
+    "{{json .}}",
+    verbose = FALSE
   )
   if (isTRUE(px_res$status == 0)) {
     res_df <- px_res$stdout |>
@@ -39,19 +73,15 @@ docker_list_images <- function() {
 }
 
 #' @export
+#' @rdname docker_client_cmd
 docker_list_containers <- function() {
   # docker ps -a --format '"{{json . }}"'
-  docker_bin_path <- is_docker_available()
-  px_res <- processx::run(
-    command = docker_bin_path,
-    args = c(
-      "ps",
-      "-a",
-      "--format",
-      "{{json .}}"
-    ),
-    echo = FALSE,
-    spinner = TRUE
+  px_res <- docker_client_cmd(
+    "ps",
+    "-a",
+    "--format",
+    "{{json .}}",
+    verbose = FALSE
   )
   if (isTRUE(px_res$status == 0)) {
     res_df <- px_res$stdout |>
@@ -69,45 +99,38 @@ docker_list_containers <- function() {
       Ports = character(0L),
       ID = character(0L)
     )
-
   }
   return(res_df)
 }
 
-#' Remove Docker Image
-#' @param image_name Name or ID of the Image.
 #' @export
+#' @rdname docker_client_cmd
 docker_remove_image <- function(image_name) {
   # docker image rm {image_name}
-  docker_bin_path <- is_docker_available()
-  px_res <- processx::run(
-    command = docker_bin_path,
-    args = c(
-      "image",
-      "rm",
-      image_name
-    ),
-    echo = FALSE,
-    spinner = TRUE
-  )
+  px_res <- docker_client_cmd("image", "rm", image_name)
+  return(invisible(px_res))
 }
 
-#' Remove Docker Container
-#'
-#' Container needs to be stopped before removing
-#'
-#' @param container_name Name or ID of the Container.
 #' @export
+#' @rdname docker_client_cmd
 docker_remove_container <- function(container_name) {
-  # docker rm {image_name}
-  docker_bin_path <- is_docker_available()
-  px_res <- processx::run(
-    command = docker_bin_path,
-    args = c(
-      "rm",
-      container_name
-    ),
-    echo = FALSE,
-    spinner = TRUE
-  )
+  # docker rm {container_name}
+  px_res <- docker_client_cmd("rm", container_name)
+  return(invisible(px_res))
+}
+
+#' @export
+#' @rdname docker_client_cmd
+docker_stop_container <- function(container_name) {
+  # docker rm {container_name}
+  px_res <- docker_client_cmd("stop", container_name)
+  return(invisible(px_res))
+}
+
+#' @export
+#' @rdname docker_client_cmd
+docker_start_container <- function(container_name) {
+  # docker rm {container_name}
+  px_res <- docker_client_cmd("start", container_name)
+  return(invisible(px_res))
 }
