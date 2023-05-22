@@ -9,11 +9,22 @@ test_that("Run new container", {
   expect_equal(px_res$status, 0)
   expect_true(stringr::str_detect(px_res$stdout, "home"))
 
-  px_res2 <- docker_run(
-    "ls", "-lah", "/mnt",
-    container_name = "test-123",
-    image_name = "ubuntu"
+  temp_path <- fs::dir_create(
+    fs::path_temp()
   )
+  temp_file <- fs::path(temp_path, "test", ext = "txt")
+  fs::file_create(temp_file)
 
+  px_res2 <- docker_run(
+    "ls", "-lah", temp_path,
+    container_name = "test-123",
+    image_name = "ubuntu",
+    mount_paths = paste0("-v=",temp_path,":",temp_file)
+  )
+  expect_true(fs::file_exists(temp_file))
+  if (fs::file_exists(temp_file)) {
+    fs::file_delete(temp_file)
+  }
   docker_remove_container("test-123")
+  expect_true(stringr::str_detect(px_res2$stdout, "test.txt"))
 })
