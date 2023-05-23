@@ -26,12 +26,44 @@ remotes::install_github("luciorq/dockerthis")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+List files inside a Ubuntu 22.04 LTS container
 
 ``` r
 library(dockerthis)
-dockerthis::run("samtools", "--version")
+
+command_result <- docker_run(
+  "ls", "-lah", "/",
+  container_name = "dockerthis-ubuntu-test",
+  image_name = "ubuntu:22.04"
+)
+
+docker_list_containers()
+
+docker_remove_container("dockerthis-ubuntu-test")
 ```
+
+Bionformatics example using the Salmon RNA-Seq Aligner pre-built Docker image.
+
+``` r
+library(dockerthis)
+command_result <- docker_run(
+  "salmon", "quant", "--help-reads",
+  container_name = "dockerthis-salmon-test",
+  image_name = "combinelab/salmon:latest",
+  docker_args = c(
+    "--platform=linux/amd64",
+    "--user=1000"
+  ),
+  mount_paths = c(
+    getwd()
+  )
+)
+
+docker_list_containers()
+
+docker_remove_container("dockerthis-salmon-test")
+```
+
 
 ## Motivation
 
