@@ -26,10 +26,37 @@ docker_run <- function(cmd,
                        docker_args = NULL,
                        mount_paths = NULL,
                        verbose = TRUE) {
+  mount_path_arg <- c()
+  if (!is.null(mount_paths)) {
+    for (mount_path in mount_paths) {
+      if (isTRUE(stringr::str_detect(mount_path, pattern = ":"))) {
+        mount_temp_vec <- unlist(stringr::str_split(mount_path, pattern = ":"))
+        if (!fs::dir_exists(mount_temp_vec[1])) {
+          cli::cli_abort(c(
+            `x` = "{.path {mount_temp_vec[1]}} do not exist."
+          ))
+        }
+        mount_path_real <- mount_temp_vec[1]
+        mount_path_target <- mount_temp_vec[2]
+      } else {
+        if (!fs::dir_exists(mount_path)) {
+          cli::cli_abort(c(
+            `x` = "{.path {mount_path}} do not exist."
+          ))
+        }
+        mount_path_real <- mount_path
+        mount_path_target <- mount_path_real
+      }
+      mount_path_arg <- c(
+        mount_path_arg,
+        paste0("-v=",mount_path_real,":",mount_path_target)
+      )
+    }
+  }
   px_res <- docker_client_cmd(
     "run",
     docker_args,
-    mount_paths,
+    mount_path_arg,
     "--name",
     container_name,
     image_name,

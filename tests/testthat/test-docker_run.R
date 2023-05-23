@@ -18,8 +18,8 @@ test_that("Run new container", {
   px_res2 <- docker_run(
     "ls", "-lah", temp_path,
     container_name = "test-123",
-    image_name = "ubuntu",
-    mount_paths = paste0("-v=",temp_path,":",temp_file)
+    image_name = "ubuntu:22.04",
+    mount_paths = temp_path
   )
   expect_true(fs::file_exists(temp_file))
   if (fs::file_exists(temp_file)) {
