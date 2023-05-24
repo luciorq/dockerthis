@@ -49,6 +49,7 @@ docker_build_image <- function(dockerfile_path,
   px_res <- docker_client_cmd(
     "buildx",
     "build",
+    "--no-cache",
     platform_arg, # "linux/amd64,linux/arm64,linux/arm/v7",
     "--file",
     dockerfile_path,

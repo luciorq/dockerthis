@@ -4,7 +4,9 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-`dockerthis` is a companion package for `condathis` and `runthis`.
+<!-- `dockerthis` is a companion package for `condathis` and `runthis`. -->
+
+**Ship anything, anywhere!**
 
 The main goal of `dockerthis` is to allow command line applications that don't
 package nativelly on unsupported Operational Systems (OS) or CPU architectures 
@@ -40,30 +42,59 @@ command_result <- docker_run(
 docker_list_containers()
 
 docker_remove_container("dockerthis-ubuntu-test")
+
+command_result
 ```
 
-Bionformatics example using the Salmon RNA-Seq Aligner pre-built Docker image.
+Bionformatics example using the Salmon RNA-Seq Aligner pre-built Docker image,
+available at [COMBINE-lab/salmon][salmon-ref].
+
+Automatically remove container after execution.
 
 ``` r
-library(dockerthis)
-command_result <- docker_run(
+salmon_result <- docker_run(
   "salmon", "quant", "--help-reads",
   container_name = "dockerthis-salmon-test",
   image_name = "combinelab/salmon:latest",
   docker_args = c(
     "--platform=linux/amd64",
-    "--user=1000"
+    "--user=",
+    "--rm"
   ),
   mount_paths = c(
     getwd()
   )
 )
 
-docker_list_containers()
-
-docker_remove_container("dockerthis-salmon-test")
+salmon_result
 ```
 
+Run any command in a conda environment inside a Linux container leveraging [`condathis`][condathis-ref]
+integration with `dockerthis`.
+
+``` r
+docker_run(
+  "micromamba", "create", "-n", "test-env", "-y", "-c", "conda-forge", "-c", "bioconda", "samtools",
+  container_name = "condathis-micromamba-samtools",
+  image_name = "luciorq/condathis-micromamba:latest",
+  docker_args = c(
+    "--platform=linux/amd64",
+    "--user=dockerthis",
+  ),
+  mount_paths = c(
+    getwd()
+  )
+)
+docker_remove_container("condathis-micromamba-samtools")
+```
+
+<!--
+``` bash
+cd ~/workspaces/temp/condathis-test;
+download https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_43/gencode.v43.transcripts.fa.gz;
+docker run --platform=linux/amd64 -it --rm -v ${PWD}:${PWD} combinelab/salmon:latest salmon index --transcripts ${PWD}/gencode.v43.transcripts.fa.gz --index ${PWD}/salmon_index --kmerLen 31 --threads 4 --keepDuplicates;
+```
+-->
 
 ## Motivation
 
@@ -80,3 +111,5 @@ with the Docker Engine API, for that one can look at projects like [stevedore][s
 ---
 
 [stevedore-ref]: https://github.com/richfitz/stevedore
+[condathis-ref]: https://github.com/luciorq/condathis
+[salmon-ref]: https://github.com/COMBINE-lab/salmon

@@ -26,7 +26,8 @@ RUN wget https://micromamba.snakepit.net/api/micromamba/linux-64/latest -O /tmp/
 # Create a non-root user and change permissions on app directory
 RUN useradd -m dockerthis \
   && mkdir -p /app \
-  && chown -R dockerthis:dockerthis /app;
+  && chown -R dockerthis:dockerthis /app \
+  && chmod -R 0777 /app;
 
 # Set the working directory and grant permissions to the non-root user
 WORKDIR /app
