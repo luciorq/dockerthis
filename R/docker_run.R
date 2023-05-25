@@ -36,20 +36,20 @@ docker_run <- function(cmd,
             `x` = "{.path {mount_temp_vec[1]}} do not exist."
           ))
         }
-        mount_path_real <- mount_temp_vec[1]
-        mount_path_target <- mount_temp_vec[2]
+        mount_path_abs <- fs::path_abs(mount_temp_vec[1])
+        mount_path_target <- fs::path_abs(mount_temp_vec[2])
       } else {
         if (!fs::dir_exists(mount_path)) {
           cli::cli_abort(c(
             `x` = "{.path {mount_path}} do not exist."
           ))
         }
-        mount_path_real <- mount_path
-        mount_path_target <- mount_path_real
+        mount_path_abs <- fs::path_abs(mount_path)
+        mount_path_target <- mount_path_abs
       }
       mount_path_arg <- c(
         mount_path_arg,
-        paste0("-v=",mount_path_real,":",mount_path_target)
+        paste0("-v=", mount_path_abs,":", mount_path_target)
       )
     }
   }
