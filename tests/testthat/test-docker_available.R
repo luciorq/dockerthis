@@ -5,6 +5,7 @@ test_that("Docker Available", {
 })
 
 test_that("Missing Docker CLI", {
+  skip_if_not_local()
   withr::local_path(new = list(), action = "replace")
   expect_error(
     object = is_docker_available(),
