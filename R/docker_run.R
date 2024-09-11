@@ -27,11 +27,11 @@ docker_run <- function(cmd,
                        mount_paths = NULL,
                        verbose = TRUE) {
   mount_path_arg <- c()
-  if (!is.null(mount_paths)) {
+  if (isFALSE(is.null(mount_paths))) {
     for (mount_path in mount_paths) {
       if (isTRUE(stringr::str_detect(mount_path, pattern = ":"))) {
         mount_temp_vec <- unlist(stringr::str_split(mount_path, pattern = ":"))
-        if (!fs::dir_exists(mount_temp_vec[1])) {
+        if (isFALSE(fs::dir_exists(mount_temp_vec[1]))) {
           cli::cli_abort(c(
             `x` = "{.path {mount_temp_vec[1]}} do not exist."
           ))
@@ -39,7 +39,7 @@ docker_run <- function(cmd,
         mount_path_abs <- fs::path_abs(mount_temp_vec[1])
         mount_path_target <- fs::path_abs(mount_temp_vec[2])
       } else {
-        if (!fs::dir_exists(mount_path)) {
+        if (isFALSE(fs::dir_exists(mount_path))) {
           cli::cli_abort(c(
             `x` = "{.path {mount_path}} do not exist."
           ))

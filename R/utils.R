@@ -52,12 +52,13 @@ docker_list_images <- function() {
     "{{json .}}",
     verbose = FALSE
   )
-  if (isTRUE(px_res$status == 0)) {
+  if (isTRUE(isTRUE(px_res$status == 0) && isTRUE(nzchar(px_res$stdout)))) {
     res_df <- px_res$stdout |>
       stringr::str_remove("\n$") |>
       stringr::str_split(pattern = "\n", simplify = FALSE) |>
       unlist() |>
-      purrr::map_dfr(jsonlite::fromJSON)
+      purrr::map(\(x){tibble::as_tibble(jsonlite::fromJSON(x))}) |>
+      purrr::list_rbind()
     res_df <- res_df[, c("Repository", "Tag", "ID", "CreatedSince", "Size")]
   } else {
     res_df <- tibble::tibble(
@@ -83,12 +84,13 @@ docker_list_containers <- function() {
     "{{json .}}",
     verbose = FALSE
   )
-  if (isTRUE(px_res$status == 0)) {
+  if (isTRUE(isTRUE(px_res$status == 0) && isTRUE(nzchar(px_res$stdout)))) {
     res_df <- px_res$stdout |>
       stringr::str_remove("\n$") |>
       stringr::str_split(pattern = "\n", simplify = FALSE) |>
       unlist() |>
-      purrr::map_dfr(jsonlite::fromJSON)
+      purrr::map(\(x){tibble::as_tibble(jsonlite::fromJSON(x))}) |>
+      purrr::list_rbind()
     res_df <- res_df[, c("Names", "Image", "State", "Status", "Ports", "ID")]
   } else {
     res_df <- tibble::tibble(
