@@ -1,6 +1,6 @@
 Package: dockerthis
 Title: Dockerthis: run any CLI tool on a Linux Container
-Version: 0.0.0.9005
+Version: 0.0.0.9006
 Authors@R: c(
     person("Lucio Rezende", "Queiroz", , "luciorqueiroz@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6090-1834"))
@@ -10,7 +10,7 @@ Description: Dockerthis is an R package that simplifies the execution of command
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Imports:
     cli,
     fs,
