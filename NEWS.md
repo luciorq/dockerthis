@@ -1,3 +1,3 @@
 # dockerthis (development version)
 
-* Initial CRAN submission.
+* Initial r-universe upload (v0.0.0.9006).
